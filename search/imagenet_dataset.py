@@ -55,8 +55,8 @@ class DataIterator(object):
             _, data = next(self.iterator)
         return data[0], data[1]
 
-train_dir = '/mnt/workspace/Zhangbeichen/dataset/imagenet1k/ImageNet-1K/raw/ImageNet-1K/train'
-val_dir = '/mnt/workspace/Zhangbeichen/dataset/imagenet1k/ImageNet-1K/raw/ImageNet-1K/val'
+train_dir = ''
+val_dir = ''
 
 assert os.path.exists(train_dir)
 assert os.path.exists(val_dir)
