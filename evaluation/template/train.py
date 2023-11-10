@@ -65,10 +65,10 @@ class DataIterator(object):
 def get_args():
     parser = argparse.ArgumentParser("ShuffleNetV2_OneShot")
     parser.add_argument('--eval', default=False, action='store_true')
-    parser.add_argument('--eval-resume', type=str, default='./snet_detnas.pkl', help='path for eval model')
+    parser.add_argument('--eval-resume', type=str, default='./models/checkpoint-300000.pth.tar', help='path for eval model')
     parser.add_argument('--batch-size', type=int, default=1024, help='batch size')
     parser.add_argument('--total-iters', type=int, default=300000, help='total iters')
-    parser.add_argument('--learning-rate', type=float, default=0.5, help='init learning rate')
+    parser.add_argument('--learning-rate', type=float, default=0.45, help='init learning rate')
     parser.add_argument('--momentum', type=float, default=0.9, help='momentum')
     parser.add_argument('--weight-decay', type=float, default=4e-5, help='weight decay')
     parser.add_argument('--save', type=str, default='./models', help='path for saving trained models')
@@ -79,8 +79,8 @@ def get_args():
     parser.add_argument('--val-interval', type=int, default=10000, help='report frequency')
     parser.add_argument('--save-interval', type=int, default=10000, help='report frequency')
 
-    parser.add_argument('--train-dir', type=str, default='', help='path to training dataset')
-    parser.add_argument('--val-dir', type=str, default='', help='path to validation dataset')
+    parser.add_argument('--train-dir', type=str, default='/mnt/workspace/Zhangbeichen/dataset/imagenet1k/ImageNet-1K/raw/ImageNet-1K/train', help='path to training dataset')
+    parser.add_argument('--val-dir', type=str, default='/mnt/workspace/Zhangbeichen/dataset/imagenet1k/ImageNet-1K/raw/ImageNet-1K/val', help='path to validation dataset')
 
     args = parser.parse_args()
     return args
@@ -116,7 +116,7 @@ def main():
     )
     train_loader = torch.utils.data.DataLoader(
         train_dataset, batch_size=args.batch_size, shuffle=True,
-        num_workers=1, pin_memory=use_gpu)
+        num_workers=8, pin_memory=use_gpu)
     train_dataprovider = DataIterator(train_loader)
 
     assert os.path.exists(args.val_dir)
@@ -126,8 +126,8 @@ def main():
             transforms.CenterCrop(224),
             ToBGRTensor(),
         ])),
-        batch_size=200, shuffle=False,
-        num_workers=1, pin_memory=use_gpu
+        batch_size=1000, shuffle=False,
+        num_workers=8, pin_memory=use_gpu
     )
     val_dataprovider = DataIterator(val_loader)
     print('load data successfully')
@@ -140,8 +140,10 @@ def main():
     else:
         raise NotImplementedError
     channels_scales = (1.0,)*20
+    print("architecture:")
+    print(architecture)
     model = ShuffleNetV2_OneShot(architecture=architecture, channels_scales=channels_scales)
-
+    
     print('flops:',get_flops(model))
 
     optimizer = torch.optim.SGD(get_parameters(model),
@@ -183,7 +185,7 @@ def main():
     if args.eval:
         if args.eval_resume is not None:
             checkpoint = torch.load(args.eval_resume, map_location=None if use_gpu else 'cpu')
-            model.load_state_dict(checkpoint, strict=True)
+            model.load_state_dict(checkpoint['state_dict'])
             validate(model, device, args, all_iters=all_iters)
         exit(0)
 
@@ -256,7 +258,7 @@ def validate(model, device, args, *, all_iters=None):
     val_dataprovider = args.val_dataprovider
 
     model.eval()
-    max_val_iters = 250
+    max_val_iters = 50
     t1  = time.time()
     with torch.no_grad():
         for _ in range(1, max_val_iters + 1):
