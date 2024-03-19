@@ -27,24 +27,24 @@ python3 train.py --train-dir $YOUR_TRAINDATASET_PATH --val-dir $YOUR_VALDATASET_
 First, change the data root in `imagenet_dataset.py`
 Apply supernet shifting and architecture searching in the following command
 ```bash
-cd Search
+cd search
 python3 search.py
 ```
 If you want to transfer the supernet weight to a new dataset, first, change the data root and the dataloader in `imagenet_dataset.py`, then run the following comand
 ```bash
-cd Search
+cd search
 python3 search.py --new_dataset True --n_class $new_dataset_classes 
 ```
 ### 4.Get Searched Architecture
 Get searched architecture with the following command:
 ```bash
-cd Evaluation
+cd evaluation
 python3 eval.py
 ```
 ### 5. Train from Scratch
 
 Finally, train and evaluate the searched architecture with the following command.
 ```bash
-cd Evaluation/data/$YOUR_ARCHITECTURE
+cd evaluation/data/$YOUR_ARCHITECTURE
 python3 train.py --train-dir $YOUR_TRAINDATASET_PATH --val-dir $YOUR_VALDATASET_PATH
 ```
