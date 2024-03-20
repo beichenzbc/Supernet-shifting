@@ -48,3 +48,16 @@ Finally, train and evaluate the searched architecture with the following command
 cd evaluation/data/$YOUR_ARCHITECTURE
 python3 train.py --train-dir $YOUR_TRAINDATASET_PATH --val-dir $YOUR_VALDATASET_PATH
 ```
+
+## Citation
+
+If you use these models in your research, please cite:
+
+```
+@article{zhang2024boosting,
+        title={Boosting Order-Preserving and Transferability for Neural Architecture Search: a Joint Architecture Refined Search and Fine-tuning Approach},
+        author={Beichen Zhang and Xiaoxing Wang and Xiaohan Qin and Junchi Yan},
+        journal={arXiv preprint arXiv:2403.11380},
+        year={2024}
+}
+```
