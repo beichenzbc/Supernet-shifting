@@ -1,7 +1,11 @@
 # Supernet-shifting
 
 ## Introduction
-The official code for [**Boosting Order-Preserving and Transferability for Neural Architecture Search: a Joint Architecture Refined Search and Fine-tuning Approach**](https://export.arxiv.org/abs/2403.11380) (accepted by **CVPR2024**)
+This repository is the official implementation of Supernet Shifting
+
+[**Boosting Order-Preserving and Transferability for Neural Architecture Search: a Joint Architecture Refined Search and Fine-tuning Approach**](https://export.arxiv.org/abs/2403.11380)  &emsp; (accepted by **CVPR2024**)
+\
+**Beichen Zhang**, Xiaoxing Wang, Xiaohan Qin, Junchi Yan
 
 
 ## Train From Scratch
